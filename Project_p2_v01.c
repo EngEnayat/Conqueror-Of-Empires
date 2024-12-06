@@ -38,8 +38,11 @@ int x_c1;
 int y_c1;
 int x_c2;
 int y_c2;
+char kingdom[2][2];
+int numb_king;
 char map[17][17];
 char detail[17][4];
+char x_houses[287][2];
 
 int main(){
 
@@ -93,23 +96,40 @@ void initialize(){
 
     printf(RED"dimension is %d x %d\n"RESET, dim_x,dim_y);
 
-    printf(GREEN"please enter the x position of c1 : "RESET);
-    scanf("%d", &x_c1);
-    printf(GREEN"please enter the y position of c1 : "RESET);
-    scanf("%d", &y_c1);
-    map[y_c1][x_c1] = 'C';
+    printf("count of kingdom");
 
-    printf(GREEN"please enter the x position of c2 : "RESET);
-    scanf("%d", &x_c2);
-    printf(GREEN"please enter the y position of c2 : "RESET);
-    scanf("%d", &y_c2);
-    if(x_c2  == x_c1 + 1 || x_c2  == x_c1 - 1 || x_c2  == x_c1  && y_c2  == y_c1 + 1 || y_c2  == y_c1 - 1 ||  y_c2  == y_c1) {return 1; printf("your kingdom is same");}
-    map[y_c2][x_c2] = 'C';
+    scanf("%d", &numb_king);
+
+    kingdom[numb_king][2];
+
+    int c1 = 1;
+    int c2 = 1;
+
+    for(i=0;i<numb_king;i++){
+        printf(GREEN"please enter the x position of c%d : "RESET,i+1);
+        scanf("%d", &x_c1);
+        printf(GREEN"please enter the y position of c%d : "RESET,i+1);
+        scanf("%d", &y_c1);
+        map[x_c1][y_c1] = 'c';
+        //map[kingdom[i][1]][kingdom[i][2]] = 'C';
+        }
+
+    //if(x_c2  == x_c1 + 1 || x_c2  == x_c1 - 1 || x_c2  == x_c1  && y_c2  == y_c1 + 1 || y_c2  == y_c1 - 1 ||  y_c2  == y_c1) {return 1; printf("your kingdom is same");}
 
 
-    int x_house ;
-    //scanf("%d", &x_house);
-    //for()
+    int x_house;
+    int x_x_house;
+    int y_x_house;
+    printf("count x house:");
+    scanf("%d", &x_house);
+    x_houses[x_house][2];
+    for(i=0;i<x_house;i++){
+        printf("x of x house %d :", i+1);
+        scanf("%d", &x_houses[i][0]);
+        printf("y of x house %d :", i+1);
+        scanf("%d", &x_houses[i][1]);
+        map[x_houses[i][0]][x_houses[i][1]] = 'x';
+    }
 
     printf(BOLD_MAGENTA"please enter the count of villages : "RESET);
     scanf("%d", &v_count);
