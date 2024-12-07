@@ -100,21 +100,23 @@ void initialize(){
 
     scanf("%d", &numb_king);
 
+    if(numb_king>2 || numb_king<0) return 1;
+
     kingdom[numb_king][2];
 
-    int c1 = 1;
-    int c2 = 1;
+    int xc1 = 18;
+    int yc1 = 18;
+
+    int farmanrava[numb_king][2];
 
     for(i=0;i<numb_king;i++){
         printf(GREEN"please enter the x position of c%d : "RESET,i+1);
-        scanf("%d", &x_c1);
+        scanf("%d", &farmanrava[i][0]);
         printf(GREEN"please enter the y position of c%d : "RESET,i+1);
-        scanf("%d", &y_c1);
-        map[x_c1][y_c1] = 'c';
-        //map[kingdom[i][1]][kingdom[i][2]] = 'C';
+        scanf("%d", &farmanrava[i][1]);
+        map[farmanrava[i][0]][farmanrava[i][1]] = 'c';
         }
-
-    //if(x_c2  == x_c1 + 1 || x_c2  == x_c1 - 1 || x_c2  == x_c1  && y_c2  == y_c1 + 1 || y_c2  == y_c1 - 1 ||  y_c2  == y_c1) {return 1; printf("your kingdom is same");}
+        if(farmanrava[0][0]==farmanrava[1][0] && farmanrava[0][1]==farmanrava[1][1] || farmanrava[0][0]==farmanrava[1][0]+1 && farmanrava[0][1]==farmanrava[1][1]+1 || farmanrava[0][0]==farmanrava[1][0]+1 && farmanrava[0][1]==farmanrava[1][1] || farmanrava[0][0]==farmanrava[1][0] && farmanrava[0][1]==farmanrava[1][1]+1 || farmanrava[0][0]==farmanrava[1][0]-1 && farmanrava[0][1]==farmanrava[1][1]-1 || farmanrava[0][0]==farmanrava[1][0] && farmanrava[0][1]==farmanrava[1][1]-1 || farmanrava[0][0]==farmanrava[1][0]-1 && farmanrava[0][1]==farmanrava[1][1]) return 1;
 
 
     int x_house;
@@ -152,26 +154,27 @@ void initialize(){
     clear_screen();
     i = 0;
     j = 0;
-
+    int v = 0;
     gotoxy(1,70);
     printf(BOLD_GREEN"your dimension"RESET);
     clear_screen();
     for(iy=0;iy<dim_y;iy++){
         for(jx=0;jx<dim_x;jx++){
             gotoxy(2*iy+1,4*jx+1+70);
-            if((jx==x_c1 && iy==y_c1)||(jx==x_c2 && iy==y_c2)) {printf(RED"%c"RESET, map[iy][jx]);}
+            if((jx==farmanrava[0][0] && iy==farmanrava[0][1])||(jx==farmanrava[1][0] && iy==farmanrava[1][1])) {printf(GREEN"%c"RESET, map[iy][jx]);}
             else{
-            printf("%c", map[iy][jx]);
+                printf("%c", map[iy][jx]);
             }
         }
     }
+
     gotoxy(35,0);
     for(i=0;i<210;i++) printf("-");
     i = 0;
     gotoxy(38,0);
     while(i<v_count){
-        printf("village(%d) y cordinat:%d\n",i+1,detail[i][0]);
-        printf("village(%d) x cordinat:%d\n",i+1,detail[i][1]);
+        printf("village(%d) x cordinate:%d\n",i+1,detail[i][1]);
+        printf("village(%d) y cordinate:%d\n",i+1,detail[i][0]);
         printf("village(%d) gold range:%d\n",i+1,detail[i][2]);
         printf("village(%d) food range:%d\n",i+1,detail[i][3]);
         i++;
