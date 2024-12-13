@@ -24,6 +24,7 @@
 #define BOLD_WHITE   "\033[1;37m"
 
 int  rand_number();
+int GenerateNumber();
 void hide_cursor();
 void welcome();
 void initialize();
@@ -40,33 +41,33 @@ int y_c1;
 int x_c2;
 int y_c2;
 char kingdom[2][2];
-int numb_king;
+int numb_king = 1;
 int map[17][17];
 int detail[17][4];
 int x_houses[287][2];
+int farmanrava[1][2];
+int cost = 0;
 
 int main(){
-
+    srand(time(NULL));
     hide_cursor();
     welcome();
     initialize();
+    making_road();
     return 0;
 }
 
 int rand_number(){
-    srand(time(NULL));
+    //srand(time(NULL));
 
-    for (int i = 0; i < 10; i++) {
-        printf("%d\n", rand());
-    }
-
-    int random_num_0_to_9 = rand() % 10;
-    printf("Random number between 0 and 9: %d\n", random_num_0_to_9);
+    //int random_num_0_to_9 = rand() % 10;
+    //printf("Random number between 0 and 9: %d\n", random_num_0_to_9);
 
 
-    int random_num_1_to_6 = rand() % 6 + 1;
-    printf("Random number between 1 and 6: %d\n", random_num_1_to_6);
+    int random_num_1_to_6 = rand() % 5 + 1;
+    //printf("Random number between 1 and 6: %d\n", random_num_1_to_6);
 }
+
 
 void gotoxy(int x, int y) {
 HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -74,18 +75,6 @@ COORD cursorCoord;
 cursorCoord.X = y;
 cursorCoord.Y = x;
 SetConsoleCursorPosition(consoleHandle, cursorCoord);
-}
-
-
-void making_road(int i,int j){
-
-        int r;
-        int equal;
-        equal = getch();
-        r = getch();
-        if(r==114){
-            map[i][j] = 61;
-        }
 }
 
 
@@ -106,11 +95,6 @@ void initialize(){
     scanf("%d", &dim_y);
     if(dim_y==0) return 1;
 
-    for(iy=0;iy<dim_y;iy++){
-        for(jx=0;jx<dim_x;jx++){
-            map[iy][jx] = 1;
-        }
-    }
     gotoxy(3,90);
     printf(RED"dimension is %d x %d \n"RESET, dim_x,dim_y);
 
@@ -122,10 +106,10 @@ void initialize(){
 
     kingdom[numb_king][2];
 
-    int xc1 = 18;
-    int yc1 = 18;
+    //int xc1 = 18;
+    //int yc1 = 18;
 
-    int farmanrava[numb_king][2];
+    farmanrava[numb_king][2];
 
     for(i=0;i<numb_king;i++){
         gotoxy(2*i+5,90);
@@ -191,6 +175,14 @@ void initialize(){
     gotoxy(1,70);
     printf(BOLD_GREEN"your dimension"RESET);
     clear_screen();
+    y_c1 = farmanrava[i][0];
+    x_c1 = farmanrava[i][1];
+    for(iy=0;iy<dim_y;iy++){
+        for(jx=0;jx<dim_x;jx++){
+            map[iy][jx] = rand_number();
+            if(iy==y_c1 && jx==x_c1) map[iy][jx] = 0;
+        }
+    }
     for(iy=0;iy<dim_y;iy++){
         for(jx=0;jx<dim_x;jx++){
             gotoxy(2*iy+1,4*jx+1+70);
@@ -227,41 +219,89 @@ void initialize(){
         i++;
    }
 
+
+    gotoxy(2*y_c1+1,4*x_c1+1+70);
+}
+
+void making_road(){
+
+    x_c1 = farmanrava[0][1];
+    y_c1 = farmanrava[0][0];
     gotoxy(2*y_c1 + 1,4*x_c1 + 1 + 70);
     int currentx=x_c1;
     int currenty=y_c1;
 
+    int allow_up = 0;
+    int allow_dn = 0;
+    int allow_r = 0;
+    int allow_l = 0;
+
     while(1){
-    gotoxy(2*y_c1 + 1,4*x_c1 + 1 + 70);
-    currentx=x_c1;
-    currenty=y_c1;
+
+    if(currenty!=0){
+        if(map[currenty][currentx]==0 || map[currenty-1][currentx]==0) allow_up = 1;
+        else allow_up = 0;
+    }
+
+        if(currenty!=dim_y-1){
+        if(map[currenty][currentx]==0 || map[currenty+1][currentx]==0) allow_dn = 1;
+        else allow_dn = 0;
+    }
+
+        if(currentx!=dim_x-1){
+        if(map[currenty][currentx]==0 || map[currenty][currentx+1]==0) allow_r = 1;
+        else allow_r = 0;
+    }
+
+        if(currentx!=0){
+        if(map[currenty][currentx]==0 || map[currenty][currentx-1]==0) allow_l = 1;
+        else allow_l = 0;
+    }
+
     gotoxy(36 , 80);
-    printf("Currentx:(%d)  CurrentY:(%d)   ",x_c1,y_c1);
-    gotoxy(2*y_c1 + 1,4*x_c1 + 1 + 70);
+    printf("Currentx:(%d)  CurrentY:(%d)   ",currentx,currenty);
+    gotoxy(2*currenty + 1,4*currentx + 1 + 70);
 
-
+    int r;
     int a1 = getch();
     if(a1==224){
         int a2=getch();
-        if(a2==72&&y_c1>0){
-            y_c1--;
+        if(a2==72 && y_c1>0 && allow_up==1){
+            currenty--;
+            allow_up = 0;
+            allow_r = 0;
+            allow_l = 0;
+        }
+        if(a2==80 && y_c1<dim_y-1 && allow_dn==1){
+            currenty++;
+            allow_dn = 0;
+            allow_r = 0;
+            allow_l = 0;
         }
 
-        if(a2==80&&y_c1<dim_y-1){
-            y_c1++;
+        if(a2==77&&x_c1<dim_x-1&&allow_r==1){
+            currentx++;
+            allow_r = 0;
+            allow_dn = 0;
+            allow_up = 0;
         }
 
-        if(a2==77&&x_c1<dim_x-1){
-            x_c1++;
-        }
-
-        if(a2==75&&x_c1>0){
-            x_c1--;
+        if(a2==75&&x_c1>0&&allow_l==1){
+            currentx--;
+            allow_l = 0;
+            allow_up = 0;
+            allow_dn = 0;
             }
 
         }
+    if(a1==114){
+        cost+=map[currenty][currentx];
+        map[currenty][currentx] = 0;
+        gotoxy(2*currenty + 1,4*currentx + 1 + 70);
+        printf("=");
+        gotoxy(2*currenty + 1,4*currentx + 1 + 70);
+        }
     }
-
 }
 
 void clear_screen(){
